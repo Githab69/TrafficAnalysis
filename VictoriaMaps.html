@@ -29,7 +29,46 @@
 	      center: location
 	      
 	    });
-	  }
+		
+		var coords = {
+		c1: {
+		center: {lat: -38.00211, lng: 145.14248},
+		},
+		c2: {
+		center: {lat: -37.96545, lng: 145.07453},
+		},
+		c3: {
+		center: {lat: -37.86314, lng: 144.98067},
+		},
+		c4: {
+		center: {lat: -37.94404, lng: 145.00131},
+		},
+		c5: {
+		center: {lat: -37.88455, lng: 145.06748},
+		},
+		c6: {
+		center: {lat: -37.98545, lng: 145.04363},
+		},
+		c7: {
+		center: {lat: -37.93407, lng: 145.04317},
+		},
+		};
+    // Add the circle for this city to the map.
+	 for (const c in coords) {
+     const cityCircle = new google.maps.Circle({
+      strokeColor: "#FF0000",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: "#FF0000",
+      fillOpacity: 0.35,
+      map,
+      center: coords[c].center,
+      radius: 1000,
+    });
+  }
+}
+
+window.initMap = initMap;
 	</script>
  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjRPTHsOK2cEj_POTDt9zBJVgwevfZRQs&callback=initMap"></script>
        
