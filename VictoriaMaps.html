@@ -2,7 +2,7 @@
 <html>
    
     <head>
-    <title>Voctoria Google Maps</title>    
+    <title>Victoria Google Maps</title>    
   	<meta charset="utf-8">
   	<meta name="description" content="Voctoria Google">
   	<meta name="keywords"    content="HTML, CSS, JavaScript">
@@ -33,27 +33,34 @@
 		var coords = {
 		c1: {
 		center: {lat: -38.00211, lng: 145.14248},
+		crashes: 100,
 		},
 		c2: {
 		center: {lat: -37.96545, lng: 145.07453},
+		crashes: 111,
 		},
 		c3: {
 		center: {lat: -37.86314, lng: 144.98067},
+		crashes: 666,
 		},
 		c4: {
 		center: {lat: -37.94404, lng: 145.00131},
+		crashes: 890,
 		},
 		c5: {
 		center: {lat: -37.88455, lng: 145.06748},
+		crashes: 322,
 		},
 		c6: {
 		center: {lat: -37.98545, lng: 145.04363},
+		crashes: 3333,
 		},
 		c7: {
 		center: {lat: -37.93407, lng: 145.04317},
+		crashes: 2567,
 		},
 		};
-    // Add the circle for this city to the map.
+    // Add the circle.
 	 for (const c in coords) {
      const cityCircle = new google.maps.Circle({
       strokeColor: "#FF0000",
@@ -63,7 +70,8 @@
       fillOpacity: 0.35,
       map,
       center: coords[c].center,
-      radius: 1000,
+	  //increase size of circle based on total crashes in LGA
+      radius: Math.sqrt(coords[c].crashes) * 50,
     });
   }
 }
