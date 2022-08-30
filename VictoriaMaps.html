@@ -2,11 +2,12 @@
 <html>
    
     <head>
-    <title>Victoria Google Maps</title>    
+    <title>Victoria Google Maps</title> 
   	<meta charset="utf-8">
   	<meta name="description" content="Voctoria Google">
   	<meta name="keywords"    content="HTML, CSS, JavaScript">
   	<meta name="author"      content="Ali MN">
+	 <script src="http://d3js.org/d3.v7.min.js"></script></style>
 	<style>
 	*{
 	margin: 0;
@@ -16,19 +17,19 @@
 	height: 600px;
 	width: 100%;
 	}
+	
 	</style>
     </head>
     <body>
 	<div id="map"></div>
-	
+
 	<script>
+   
 	  function initMap() {
 	    var location = {lat: -36.8, lng: 145};
 	    var map = new google.maps.Map(document.getElementById("map"), 
 	    {zoom: 7.1,
-	      center: location
-	      
-	    });
+	      center: location});
 		
 		var coords = {
 		c1: {
@@ -60,11 +61,13 @@
 		crashes: 2567,
 		},
 		};
+		
     // Add the circle.
 	 for (const c in coords) {
      const cityCircle = new google.maps.Circle({
       strokeColor: "#FF0000",
       strokeOpacity: 0.8,
+	  title:coords[c].crashes,
       strokeWeight: 2,
       fillColor: "#FF0000",
       fillOpacity: 0.35,
@@ -73,12 +76,19 @@
 	  //increase size of circle based on total crashes in LGA
       radius: Math.sqrt(coords[c].crashes) * 50,
     });
+	//circle is the google.maps.Circle-instance
+cityCircle.addListener('mouseover',function(){
+    this.getMap().getDiv().setAttribute('title',this.get('title'));
+});
+
+cityCircle.addListener('mouseout',function(){
+    this.getMap().getDiv().removeAttribute('title');
+});
   }
 }
 
 window.initMap = initMap;
 	</script>
  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjRPTHsOK2cEj_POTDt9zBJVgwevfZRQs&callback=initMap"></script>
-       
     </body>
 </html>
