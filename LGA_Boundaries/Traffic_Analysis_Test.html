@@ -1,0 +1,114 @@
+<!Doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Other Visualisations</title>
+	<script src="https://d3js.org/d3.v6.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
+	<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+</head>
+<body>
+	<div id="map"></div>
+	<script>
+
+			d3.csv("ACCIDENT_MASTER_single.csv", function(data) {
+				//grouped data by LGA name
+				var nested = d3.nest()
+				.key(d => d.LGA_NAME)
+				.entries(data)
+				console.log(nested)
+				
+			let mouseOver = function(d) {
+			d3.selectAll(".LGA_NAME")
+			  .transition()
+			  .duration(200)
+			  .style("opacity", 0.5)
+			d3.select(this)
+			  .transition()
+			  .duration(200)
+			  .style("opacity", 1)
+			  .style("stroke", "black")
+		}
+
+		let mouseLeave = function(d) {
+			d3.selectAll(".LGA_NAME")
+			  .transition()
+			  .duration(200)
+			  .style("opacity", 0.8)
+			d3.select(this)
+			  .transition()
+			  .duration(200)
+			  .style("opacity", 0.8)
+			  .style("stroke", "transparent")
+		}
+		//Load in GeoJSON data
+		d3.json("VIC_LGAS.json", function(json) {
+		//Bind data and create one path per GeoJSON feature
+		svg.selectAll("path")
+		.data(json.features)
+		.enter()
+		.append("path")
+		.attr("d", path)
+		.style("stroke", "transparent")
+		.style("opacity", 0.8)
+		.on("mouseover", mouseOver)
+		.on("mouseleave", mouseLeave)
+		.attr("fill", function(d, i) {return LGA_Colour(i)})
+		.on("click", function(e,d) {
+					createChart(d.properties.LGA_NAME);
+					document.getElementById("selected").innerHTML = d.properties.LGA_NAME;
+				})
+				.style("fill", function(d) {
+					var value = d.properties.value;
+					if (value) {
+						console.log(d)
+						console.log(d.properties.LGA_NAME + ": " + value)
+						return colorScale(value);
+					} 
+					else {
+						return "#ccc";
+					}
+		});
+	});
+
+	function createChart(state){
+	if(svg2){svg2.remove();}
+	svg2 = d3.select("#chart")
+					.append("svg")
+					.attr("width",w)
+					.attr("height",h);
+	}
+
+		//Width and height
+			var w = 1000;
+			var h = 800;
+
+			//Define map projection
+			var projection = d3.geo.mercator()
+								   .center([ 145,-36.5 ])
+								   //edit number on scale to change the zoom of the map
+								   .scale(6000);
+
+
+			//Define path generator
+			var path = d3.geo.path()
+						.projection(projection);
+
+            var LGA_Colour = d3.scale.ordinal()
+                .range(['#faf7d4','#faf7d4','#faf7d4','#faf7d4','#faf7d4','#faf7d4','#faf7d4','#faf7d4','#faf7d4']);
+			
+
+			//Create SVG
+			var svg = d3.select("#map")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+			
+	});
+				
+
+	</script>
+</body>
+</html>
